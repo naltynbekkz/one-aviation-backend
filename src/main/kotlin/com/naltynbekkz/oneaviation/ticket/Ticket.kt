@@ -2,7 +2,7 @@ package com.naltynbekkz.oneaviation.ticket
 
 import com.naltynbekkz.oneaviation.auth.User
 import com.naltynbekkz.oneaviation.flight.Flight
-import com.naltynbekkz.oneaviation.passenger.Passenger
+import com.naltynbekkz.oneaviation.passenger.PassengerEntity
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
 import javax.persistence.*
 
@@ -15,7 +15,7 @@ class Ticket(
     val flight: Flight? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    val passenger: Passenger? = null,
+    val passenger: PassengerEntity? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     val user: User? = null,

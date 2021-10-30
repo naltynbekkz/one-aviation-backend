@@ -1,6 +1,6 @@
 package com.naltynbekkz.oneaviation.flight
 
-import com.naltynbekkz.oneaviation.plane.Plane
+import com.naltynbekkz.oneaviation.plane.PlaneEntity
 import com.naltynbekkz.oneaviation.util.entity.Info
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
 import javax.persistence.*
@@ -11,7 +11,7 @@ class Flight(
     val id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    val plane: Plane? = null,
+    val plane: PlaneEntity? = null,
     @Embedded
     val timestamp: Timestamp? = null,
 
