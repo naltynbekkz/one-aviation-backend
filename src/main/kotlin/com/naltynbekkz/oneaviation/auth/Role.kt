@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue
 enum class Role(
     @JsonValue var value: String
 ) {
-    GOD("god"),
-    MANAGER("manager"),
-    ADMIN("admin"),
-    CUSTOMER("customer");
+    GOD("God"),
+    MANAGER("Manager"),
+    ADMIN("Admin"),
+    CUSTOMER("Customer");
 
     override fun toString(): String {
         return this.value

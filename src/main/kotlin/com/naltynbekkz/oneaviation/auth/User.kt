@@ -2,7 +2,6 @@ package com.naltynbekkz.oneaviation.auth
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
-import com.naltynbekkz.oneaviation.util.isValidPassword
 import javax.persistence.*
 
 @Entity
@@ -27,16 +26,4 @@ class User constructor(
 
     @Transient
     var password: String? = null,
-) {
-
-    constructor (userCreateRequest: User) : this(
-        username = userCreateRequest.username!!,
-        hashedPassword = userCreateRequest.hashedPassword,
-        role = userCreateRequest.role!!,
-    ) {
-        assert(isValidPassword(userCreateRequest.password!!))
-        assert(role != Role.MANAGER)
-        assert(role != Role.ADMIN)
-    }
-
-}
+)

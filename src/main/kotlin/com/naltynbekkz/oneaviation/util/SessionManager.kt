@@ -3,6 +3,7 @@ package com.naltynbekkz.oneaviation.util
 import com.naltynbekkz.oneaviation.auth.Role
 import com.naltynbekkz.oneaviation.auth.User
 import com.naltynbekkz.oneaviation.token.Token
+import com.naltynbekkz.oneaviation.token.TokenEntity
 import com.naltynbekkz.oneaviation.token.TokenRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -16,7 +17,7 @@ class SessionManager(private val tokenRepository: TokenRepository) {
         bearerToken: String?,
         response: HttpServletResponse,
         roles: List<Role>,
-    ): Token {
+    ): TokenEntity {
         val token = getTokenPrivate(
             bearerToken,
             response
@@ -30,7 +31,7 @@ class SessionManager(private val tokenRepository: TokenRepository) {
     private fun getTokenPrivate(
         bearerToken: String?,
         response: HttpServletResponse,
-    ): Token {
+    ): TokenEntity {
         if (bearerToken == null) {
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authorization header is null")
         }
@@ -53,17 +54,17 @@ class SessionManager(private val tokenRepository: TokenRepository) {
      * @param user - this function isn't responsible for making sure the user is correct.
      * @return
      */
-    fun login(user: User, response: HttpServletResponse): Token {
+    fun login(user: User, response: HttpServletResponse): TokenEntity {
         var tokenUuid: String
         do {
             tokenUuid = generateString()
         } while (tokenRepository.existsByUuid(tokenUuid))
-        val token = Token(
+        val tokenEntity = TokenEntity(
             uuid = tokenUuid,
             user = user
         )
         setSetupHeaders(response, user)
-        return tokenRepository.save(token)
+        return tokenRepository.save(tokenEntity)
     }
 
 

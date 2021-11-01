@@ -9,13 +9,13 @@ import java.util.*
 import javax.transaction.Transactional
 
 @Repository
-interface TokenRepository : JpaRepository<Token, Long> {
-    fun findByUser(user: User, pageable: Pageable): Page<Token>
+interface TokenRepository : JpaRepository<TokenEntity, Long> {
+    fun findByUser(user: User, pageable: Pageable): Page<TokenEntity>
 
     @Transactional
     fun deleteByUser(user: User): Long
 
-    fun findByUuid(value: String): Optional<Token>
+    fun findByUuid(value: String): Optional<TokenEntity>
 
     fun existsByUuid(value: String): Boolean
 

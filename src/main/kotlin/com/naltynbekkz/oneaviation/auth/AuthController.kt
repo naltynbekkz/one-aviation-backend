@@ -20,17 +20,20 @@ class AuthController(
 
     @PostMapping("/register")
     fun register(
-        @RequestBody registerRequest: User,
+        @RequestBody registrationRequest: RegistrationRequest,
         response: HttpServletResponse,
     ): Token {
-        if (userRepository.findByUsername(registerRequest.username!!) != null) {
+        if (userRepository.findByUsername(registrationRequest.username) != null) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Email already exists")
         }
-
-        registerRequest.hashedPassword = hashUtils.hash(registerRequest.password!!.toCharArray())
-        val user = User(registerRequest)
-
-        return sessionManager.login(userRepository.save(user), response)
+        val user = User(
+            username = registrationRequest.username,
+            firstName = registrationRequest.firstName,
+            lastName = registrationRequest.lastName,
+            role = Role.CUSTOMER,
+            hashedPassword = hashUtils.hash(registrationRequest.password.toCharArray())
+        )
+        return sessionManager.login(userRepository.save(user), response).toToken()
     }
 
     @PostMapping("/login")
@@ -42,7 +45,7 @@ class AuthController(
         if (!hashUtils.authenticate(loginRequest.password!!, existingUser.hashedPassword!!)) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong email or password")
         }
-        return sessionManager.login(existingUser, response)
+        return sessionManager.login(existingUser, response).toToken()
     }
 
     @DeleteMapping("/logout")
@@ -56,20 +59,21 @@ class AuthController(
         response.status = HttpStatus.NO_CONTENT.value()
     }
 
-    @PutMapping("changePassword")
+    @PutMapping("/changePassword")
     fun changePassword(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
         @RequestBody changePassword: ChangePassword,
         response: HttpServletResponse,
     ): Token {
         val token = sessionManager.getToken(tokenId, response, listOf())
-        if (token.timestamp.created + 10 * 60 * 1000 < System.currentTimeMillis()) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Token is too old")
+        val existingUser = token.user!!
+        if (!hashUtils.authenticate(changePassword.oldPassword, existingUser.hashedPassword!!)) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong email or password")
         }
         tokenRepository.deleteByUser(token.user!!)
-        token.user!!.hashedPassword = hashUtils.hash(changePassword.newPassword.toCharArray())
-        userRepository.save(token.user!!)
-        return sessionManager.login(token.user!!, response)
+        existingUser.hashedPassword = hashUtils.hash(changePassword.newPassword.toCharArray())
+        userRepository.save(existingUser)
+        return sessionManager.login(existingUser, response).toToken()
     }
 
 }
