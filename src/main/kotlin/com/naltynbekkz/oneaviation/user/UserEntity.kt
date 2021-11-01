@@ -1,11 +1,12 @@
-package com.naltynbekkz.oneaviation.auth
+package com.naltynbekkz.oneaviation.user
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.naltynbekkz.oneaviation.util.entity.Role
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
 import javax.persistence.*
 
 @Entity
-class User constructor(
+@Table(name = "users")
+class UserEntity constructor(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
@@ -15,7 +16,6 @@ class User constructor(
     var firstName: String? = null,
     var lastName: String? = null,
 
-    @JsonIgnore
     var hashedPassword: String? = null,
 
     @Column(nullable = false)
@@ -23,7 +23,6 @@ class User constructor(
 
     @Embedded
     var timestamp: Timestamp = Timestamp(),
-
-    @Transient
-    var password: String? = null,
-)
+) {
+    fun toUser() = User(id!!, username!!, firstName!!, lastName!!, timestamp)
+}

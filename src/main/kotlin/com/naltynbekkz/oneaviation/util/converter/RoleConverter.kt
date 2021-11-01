@@ -1,6 +1,6 @@
 package com.naltynbekkz.oneaviation.util.converter
 
-import com.naltynbekkz.oneaviation.auth.Role
+import com.naltynbekkz.oneaviation.util.entity.Role
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
 

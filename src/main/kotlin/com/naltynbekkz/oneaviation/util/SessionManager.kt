@@ -1,8 +1,7 @@
 package com.naltynbekkz.oneaviation.util
 
-import com.naltynbekkz.oneaviation.auth.Role
-import com.naltynbekkz.oneaviation.auth.User
-import com.naltynbekkz.oneaviation.token.Token
+import com.naltynbekkz.oneaviation.util.entity.Role
+import com.naltynbekkz.oneaviation.user.UserEntity
 import com.naltynbekkz.oneaviation.token.TokenEntity
 import com.naltynbekkz.oneaviation.token.TokenRepository
 import org.springframework.http.HttpStatus
@@ -16,22 +15,9 @@ class SessionManager(private val tokenRepository: TokenRepository) {
     fun getToken(
         bearerToken: String?,
         response: HttpServletResponse,
-        roles: List<Role>,
+        roles: List<Role> = listOf(),
     ): TokenEntity {
-        val token = getTokenPrivate(
-            bearerToken,
-            response
-        )
-        if (roles.isNotEmpty() && !roles.contains(token.user!!.role)) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied")
-        }
-        return token
-    }
 
-    private fun getTokenPrivate(
-        bearerToken: String?,
-        response: HttpServletResponse,
-    ): TokenEntity {
         if (bearerToken == null) {
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authorization header is null")
         }
@@ -45,30 +31,34 @@ class SessionManager(private val tokenRepository: TokenRepository) {
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Couldn't find the user")
         }
         setSetupHeaders(response, token.user!!)
+
+        if (roles.isNotEmpty() && !roles.contains(token.user!!.role)) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied")
+        }
         return token
     }
 
     /**
      * login
      *
-     * @param user - this function isn't responsible for making sure the user is correct.
+     * @param userEntity - this function isn't responsible for making sure the user is correct.
      * @return
      */
-    fun login(user: User, response: HttpServletResponse): TokenEntity {
+    fun login(userEntity: UserEntity, response: HttpServletResponse): TokenEntity {
         var tokenUuid: String
         do {
             tokenUuid = generateString()
         } while (tokenRepository.existsByUuid(tokenUuid))
         val tokenEntity = TokenEntity(
             uuid = tokenUuid,
-            user = user
+            user = userEntity
         )
-        setSetupHeaders(response, user)
+        setSetupHeaders(response, userEntity)
         return tokenRepository.save(tokenEntity)
     }
 
 
-    fun setSetupHeaders(response: HttpServletResponse, user: User) {
-        response.setHeader("role", user.role!!.value)
+    fun setSetupHeaders(response: HttpServletResponse, userEntity: UserEntity) {
+        response.setHeader("role", userEntity.role!!.value)
     }
 }

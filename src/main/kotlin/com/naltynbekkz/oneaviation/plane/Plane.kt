@@ -1,9 +1,12 @@
 package com.naltynbekkz.oneaviation.plane
 
+import com.naltynbekkz.oneaviation.util.entity.Timestamp
+
 class Plane(
-    val id: Long? = null,
-    val name: String? = null,
-    val mileage: Long? = null,
-    val capacity: Int? = null,
-    val price: Float? = null,
+    val id: Long,
+    val name: String,
+    val mileage: Long,
+    val capacity: Int,
+    val price: Float,
+    var timestamp: Timestamp,
 )

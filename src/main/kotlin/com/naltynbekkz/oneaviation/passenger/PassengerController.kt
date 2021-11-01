@@ -1,7 +1,12 @@
 package com.naltynbekkz.oneaviation.passenger
 
 import com.naltynbekkz.oneaviation.util.SessionManager
+import com.naltynbekkz.oneaviation.util.entity.Page
+import com.naltynbekkz.oneaviation.util.pageParams
+import com.naltynbekkz.oneaviation.util.toPage
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -17,27 +22,33 @@ class PassengerController(
         @RequestBody request: CreatePassengerRequest,
         response: HttpServletResponse,
     ): Passenger {
+        val token = sessionManager.getToken(tokenId, response)
 
-        // TODO:
-        //  get the user,
-        //  save the passenger to database,
-        //  return the passenger
+        val passenger = PassengerEntity(
+            id = null,
+            firstName = request.firstName,
+            lastName = request.lastName,
+            documentId = request.documentId,
+            user = token.user,
+        )
 
-        return Passenger()
+        return passengerRepository.save(passenger).toPassenger()
     }
 
     @GetMapping
     fun getMyPassengers(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @RequestParam(value = "page", required = false) page: Int?,
+        @RequestParam(value = "size", required = false) size: Int?,
         response: HttpServletResponse,
-    ): List<Passenger> {
+    ): Page<Passenger> {
 
-        // TODO:
-        // get the user
-        // get all of the user's passengers from database
-        // return the list
+        val token = sessionManager.getToken(tokenId, response)
 
-        return listOf()
+        return passengerRepository.getNotDeleted(token.user!!.id, pageParams(page, size))
+            .toPage {
+                it.toPassenger()
+            }
     }
 
     @DeleteMapping("/{id}")
@@ -46,11 +57,14 @@ class PassengerController(
         @PathVariable id: Long,
         response: HttpServletResponse,
     ) {
-
-        // TODO:
-        //  check if the user has authority,
-        //  delete from database,
-
+        val token = sessionManager.getToken(tokenId, response)
+        val passenger = passengerRepository.findById(id).get()
+        if (token.user!!.id != passenger.user!!.id) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Passenger isn't yours to delete")
+        }
+        passenger.timestamp.delete()
+        passengerRepository.save(passenger)
+        response.status = 204
     }
 
 }

@@ -1,4 +1,4 @@
-package com.naltynbekkz.oneaviation.auth
+package com.naltynbekkz.oneaviation.user
 
 class ChangePassword(
     var oldPassword: String,

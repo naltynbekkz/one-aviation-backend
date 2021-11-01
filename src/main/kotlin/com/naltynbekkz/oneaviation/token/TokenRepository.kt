@@ -1,6 +1,6 @@
 package com.naltynbekkz.oneaviation.token
 
-import com.naltynbekkz.oneaviation.auth.User
+import com.naltynbekkz.oneaviation.user.UserEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -10,10 +10,10 @@ import javax.transaction.Transactional
 
 @Repository
 interface TokenRepository : JpaRepository<TokenEntity, Long> {
-    fun findByUser(user: User, pageable: Pageable): Page<TokenEntity>
+    fun findByUser(userEntity: UserEntity, pageable: Pageable): Page<TokenEntity>
 
     @Transactional
-    fun deleteByUser(user: User): Long
+    fun deleteByUser(userEntity: UserEntity): Long
 
     fun findByUuid(value: String): Optional<TokenEntity>
 

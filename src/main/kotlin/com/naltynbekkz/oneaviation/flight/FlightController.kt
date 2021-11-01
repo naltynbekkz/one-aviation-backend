@@ -10,8 +10,4 @@ import org.springframework.web.bind.annotation.RestController
 class FlightController(
     private val flightRepository: FlightRepository,
     private val sessionManager: SessionManager,
-) {
-
-
-
-}
+)

@@ -1,4 +1,4 @@
-package com.naltynbekkz.oneaviation.auth
+package com.naltynbekkz.oneaviation.util.entity
 
 import com.fasterxml.jackson.annotation.JsonValue
 

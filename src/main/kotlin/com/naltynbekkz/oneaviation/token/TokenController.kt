@@ -23,7 +23,7 @@ class TokenController(
         @RequestParam(value = "size", required = false) size: Int?,
         response: HttpServletResponse,
     ): Page<Token> {
-        val tokenEntity: TokenEntity = sessionManager.getToken(tokenId, response, listOf())
+        val tokenEntity: TokenEntity = sessionManager.getToken(tokenId, response)
         return tokenRepository.findByUser(tokenEntity.user!!, pageParams(page, size)).toPage {
             it.toToken()
         }
@@ -35,7 +35,7 @@ class TokenController(
         @PathVariable id: Long,
         response: HttpServletResponse,
     ) {
-        val tokenEntity: TokenEntity = sessionManager.getToken(tokenId, response, listOf())
+        val tokenEntity: TokenEntity = sessionManager.getToken(tokenId, response)
         val delete = tokenRepository.findById(id).get()
         if (tokenEntity.user!!.id != delete.user!!.id) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Token isn't yours to delete")
