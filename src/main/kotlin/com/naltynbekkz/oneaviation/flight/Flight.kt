@@ -1,6 +1,7 @@
 package com.naltynbekkz.oneaviation.flight
 
 import com.naltynbekkz.oneaviation.plane.Plane
+import com.naltynbekkz.oneaviation.plane.PlaneEntity
 import com.naltynbekkz.oneaviation.util.entity.Info
 import com.naltynbekkz.oneaviation.util.entity.Location
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
@@ -11,7 +12,8 @@ data class Flight(
     val plane: Plane,
     val timestamp: Timestamp,
     val departure: Info,
-    val arrival: Info,
+    val arrival: Location,
+    val status: FlightStatus,
 ) {
 
     companion object {
@@ -23,13 +25,14 @@ data class Flight(
 
         fun getRandomFlight() = Flight(
             id = Random.nextLong(0, System.currentTimeMillis()),
-            plane = getRandomPlane(),
+            plane = getRandomPlane().toPlane(),
             timestamp = getRandomTimestamp(),
             departure = getRandomInfo(),
-            arrival = getRandomInfo()
+            arrival = getRandomLocation(),
+            status = FlightStatus.CREATED,
         )
 
-        fun getRandomPlane(): Plane {
+        fun getRandomPlane(): PlaneEntity {
             val names = listOf(
                 "Airbus A333-300",
                 "Airbus A340-300",
@@ -43,8 +46,8 @@ data class Flight(
                 "Airbus A380-800",
                 "Airbus A380plus",
             )
-            return Plane(
-                id = Random.nextLong(0, 100000),
+            return PlaneEntity(
+                id = null,
                 name = names.random(),
                 mileage = Random.nextLong(6, 10) * 10,
                 capacity = Random.nextInt(6, 20),
@@ -55,17 +58,19 @@ data class Flight(
 
         fun getRandomInfo() = Info(
             time = Random.nextLong(0, 100000),
-            location = Location(
-                long = Random.nextFloat() * 360 - 180,
-                lat = Random.nextFloat() * 360 - 180,
-            )
+            location = getRandomLocation()
+        )
+
+        fun getRandomLocation() = Location(
+            long = Random.nextFloat() * 360 - 180,
+            lat = Random.nextFloat() * 360 - 180,
         )
 
         fun getRandomTimestamp(): Timestamp {
             val current = System.currentTimeMillis()
             return Timestamp(
-                created = Random.nextLong(current, current * 100 / 101),
-                updated = Random.nextLong(current, current * 100 / 101),
+                created = Random.nextLong(current, current * 101 / 100),
+                updated = Random.nextLong(current, current * 101 / 100),
                 deleted = null,
             )
         }

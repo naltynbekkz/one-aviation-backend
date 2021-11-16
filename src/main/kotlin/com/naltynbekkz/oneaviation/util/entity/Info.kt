@@ -5,7 +5,7 @@ import javax.persistence.Embedded
 
 @Embeddable
 class Info(
-    val time: Long?,
+    val time: Long? = null,
     @Embedded
     val location: Location? = null,
 )
