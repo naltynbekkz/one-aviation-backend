@@ -6,6 +6,7 @@ import javax.persistence.Embeddable
 class Location(
     val long: Float? = null,
     val lat: Float? = null,
+    val address: String? = null,
 ) {
 //    /**
 //     * @return: distance in km

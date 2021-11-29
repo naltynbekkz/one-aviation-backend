@@ -1,7 +1,5 @@
 package com.naltynbekkz.oneaviation.book
 
-import com.naltynbekkz.oneaviation.flight.Flight
-import com.naltynbekkz.oneaviation.flight.Flight.Companion.getRandomPlane
 import com.naltynbekkz.oneaviation.flight.FlightEntity
 import com.naltynbekkz.oneaviation.flight.FlightRepository
 import com.naltynbekkz.oneaviation.flight.FlightStatus
@@ -10,7 +8,6 @@ import com.naltynbekkz.oneaviation.plane.PlaneRepository
 import com.naltynbekkz.oneaviation.ticket.TicketEntity
 import com.naltynbekkz.oneaviation.ticket.TicketRepository
 import com.naltynbekkz.oneaviation.util.SessionManager
-import com.naltynbekkz.oneaviation.util.entity.Info
 import com.naltynbekkz.oneaviation.util.entity.Role
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
 import org.springframework.web.bind.annotation.*

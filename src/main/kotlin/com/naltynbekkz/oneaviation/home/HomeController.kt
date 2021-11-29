@@ -4,6 +4,7 @@ import com.naltynbekkz.oneaviation.book.Book
 import com.naltynbekkz.oneaviation.book.BookEntity
 import com.naltynbekkz.oneaviation.book.BookRepository
 import com.naltynbekkz.oneaviation.flight.Flight
+import com.naltynbekkz.oneaviation.flight.FlightRepository
 import com.naltynbekkz.oneaviation.util.SessionManager
 import com.naltynbekkz.oneaviation.util.entity.Role
 import org.springframework.web.bind.annotation.*
@@ -12,7 +13,8 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 @RequestMapping("/home")
 class HomeController(
-    private val repository: BookRepository,
+    private val bookRepository: BookRepository,
+    private val repository: FlightRepository,
     private val sessionManager: SessionManager,
 ) {
 
@@ -24,7 +26,9 @@ class HomeController(
     ): List<Flight> {
         sessionManager.getToken(tokenId, response)
 
-        return Flight.getRandomList()
+        val flights = repository.getFuture()
+
+        return flights.map { it.toFlight() }
     }
 
     @PostMapping("/book")
@@ -44,7 +48,7 @@ class HomeController(
             token.user
         )
 
-        return repository.save(book).toBook()
+        return bookRepository.save(book).toBook()
     }
 
 }
