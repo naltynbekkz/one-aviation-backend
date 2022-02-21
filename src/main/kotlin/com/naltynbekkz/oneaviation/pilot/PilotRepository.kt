@@ -1,4 +1,4 @@
-package com.naltynbekkz.oneaviation.user
+package com.naltynbekkz.oneaviation.pilot
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -7,12 +7,10 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : JpaRepository<UserEntity, Long> {
-    fun findByUsername(email: String): UserEntity?
-
+interface PilotRepository : JpaRepository<PilotEntity, Long> {
     @Query(
-        value = "select * from users where timestamp_deleted is null and role = 'Customer'",
+        value = "select * from pilots where timestamp_deleted is null",
         nativeQuery = true
     )
-    fun findCustomers(pageable: Pageable): Page<UserEntity>
+    fun getNotDeleted(pageable: Pageable): Page<PilotEntity>
 }
