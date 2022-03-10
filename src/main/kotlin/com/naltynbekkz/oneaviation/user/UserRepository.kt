@@ -15,4 +15,9 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
         nativeQuery = true
     )
     fun findCustomers(pageable: Pageable): Page<UserEntity>
+
+    @Query(
+        value = "select * from users where timestamp_deleted is null and role = 'Admin'",
+    )
+    fun findAdmins(): List<UserEntity>
 }

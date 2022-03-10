@@ -1,10 +1,7 @@
 package com.naltynbekkz.oneaviation.plane
 
-import com.naltynbekkz.oneaviation.util.entity.Role
 import com.naltynbekkz.oneaviation.util.SessionManager
-import com.naltynbekkz.oneaviation.util.entity.Page
-import com.naltynbekkz.oneaviation.util.pageParams
-import com.naltynbekkz.oneaviation.util.toPage
+import com.naltynbekkz.oneaviation.util.entity.Role
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
@@ -38,8 +35,8 @@ class PlaneController(
         @RequestParam(value = "page", required = false) page: Int?,
         @RequestParam(value = "size", required = false) size: Int?,
         response: HttpServletResponse,
-    ): Page<Plane> {
-        return planeRepository.getNotDeleted(pageParams(page, size)).toPage { it.toPlane() }
+    ): List<Plane> {
+        return planeRepository.getNotDeleted().map { it.toPlane() }
     }
 
     @PutMapping
