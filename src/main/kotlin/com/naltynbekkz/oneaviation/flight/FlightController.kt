@@ -15,10 +15,12 @@ class FlightController(
     @GetMapping
     fun getAllFlights(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @RequestParam("from") from: Long,
+        @RequestParam("to") to: Long,
         response: HttpServletResponse,
     ): List<Flight> {
         sessionManager.getToken(tokenId, response, listOf(Role.MANAGER, Role.ADMIN))
-        return flightRepository.getAll().map { it.toFlight() }
+        return flightRepository.getAll(from, to).map { it.toFlight() }
     }
 
     @GetMapping("/{id}")

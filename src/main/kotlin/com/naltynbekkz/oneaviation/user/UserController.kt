@@ -1,9 +1,6 @@
 package com.naltynbekkz.oneaviation.user
 
 import com.naltynbekkz.oneaviation.auth.RegistrationRequest
-import com.naltynbekkz.oneaviation.plane.CreatePlaneRequest
-import com.naltynbekkz.oneaviation.plane.Plane
-import com.naltynbekkz.oneaviation.plane.PlaneEntity
 import com.naltynbekkz.oneaviation.util.HashUtils
 import com.naltynbekkz.oneaviation.util.SessionManager
 import com.naltynbekkz.oneaviation.util.entity.Role
@@ -29,15 +26,25 @@ class UserController(
         return repository.findAdmins().map { it.toUser() }
     }
 
-    @PostMapping
+    @GetMapping("/admins/{id}")
+    fun getFlight(
+        @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @PathVariable id: Long,
+        response: HttpServletResponse,
+    ): User {
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
+        return repository.findById(id).get().toUser()
+    }
+
+    @PostMapping("/admins")
     fun createAdmin(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
         @RequestBody request: RegistrationRequest,
         response: HttpServletResponse,
     ): User {
-        val token = sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
         if (repository.findByUsername(request.username) != null) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Email already exists")
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "username already exists")
         }
         val userEntity = UserEntity(
             username = request.username,
@@ -46,7 +53,7 @@ class UserController(
             role = Role.ADMIN,
             hashedPassword = hashUtils.hash(request.password.toCharArray())
         )
-        return userEntity.toUser()
+        return repository.save(userEntity).toUser()
     }
 
 }

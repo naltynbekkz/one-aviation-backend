@@ -18,6 +18,7 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
     @Query(
         value = "select * from users where timestamp_deleted is null and role = 'Admin'",
+        nativeQuery = true
     )
     fun findAdmins(): List<UserEntity>
 }
