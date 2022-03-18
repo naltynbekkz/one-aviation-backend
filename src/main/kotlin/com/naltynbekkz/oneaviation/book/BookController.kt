@@ -60,7 +60,7 @@ class BookController(
         @RequestBody request: ConfirmBookRequest,
         response: HttpServletResponse,
     ): ConfirmBookResponse {
-        val token = sessionManager.getToken(tokenId, response, listOf(Role.CUSTOMER))
+        sessionManager.getToken(tokenId, response, listOf(Role.CUSTOMER))
 
         val book = bookRepository.findById(request.id).get()
 
@@ -86,7 +86,7 @@ class BookController(
             }
         )
 
-        return ConfirmBookResponse(flight.toFlight(), tickets.map { it.toTicket() })
+        return ConfirmBookResponse(flight.toFlight(1), tickets.map { it.toTicket() })
 
     }
 

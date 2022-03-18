@@ -28,7 +28,7 @@ class HomeController(
 
         val flights = repository.getFuture()
 
-        return flights.map { it.toFlight() }
+        return flights.map { it.toFlight(0) }
     }
 
     @PostMapping("/book")

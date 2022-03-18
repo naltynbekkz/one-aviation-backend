@@ -13,4 +13,10 @@ interface TicketRepository : JpaRepository<TicketEntity, Long> {
         nativeQuery = true
     )
     fun getNotDeleted(userId: Long?, pageable: Pageable): Page<TicketEntity>
+
+    @Query(
+        value = "select count(*) from tickets where flight_id = :flightId",
+        nativeQuery = true,
+    )
+    fun getByFlightId(flightId: Int): Int
 }

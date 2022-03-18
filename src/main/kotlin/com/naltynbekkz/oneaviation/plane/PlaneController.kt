@@ -39,17 +39,26 @@ class PlaneController(
         return planeRepository.getNotDeleted().map { it.toPlane() }
     }
 
-    @PutMapping
-    fun putPlane(
+    @GetMapping("/{id}")
+    fun getPlane(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @RequestBody request: Plane,
+        @PathVariable id: Long,
         response: HttpServletResponse,
     ): Plane {
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
+        return planeRepository.findById(id).get().toPlane()
+    }
 
-        val oldPlane = planeRepository.findById(request.id).get()
+    @PutMapping("/{id}")
+    fun putPlane(
+        @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @PathVariable id: Long,
+        @RequestBody request: CreatePlaneRequest,
+        response: HttpServletResponse,
+    ): Plane {
+        val oldPlane = planeRepository.findById(id).get()
         val token = sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
 
-        oldPlane.id = request.id
         oldPlane.name = request.name
         oldPlane.mileage = request.mileage
         oldPlane.capacity = request.capacity

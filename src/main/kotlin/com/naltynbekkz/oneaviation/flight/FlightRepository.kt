@@ -14,9 +14,9 @@ interface FlightRepository : JpaRepository<FlightEntity, Long> {
     fun getFuture(): List<FlightEntity>
 
     @Query(
-        value = "select * from flights where departure_time >= :from and departure_time <= :to",
+        value = "select * from flights where departure_time >= :from and departure_time <= :to and not (status = :status)",
         nativeQuery = true
     )
-    fun getAll(from: Long, to: Long): List<FlightEntity>
+    fun getAll(from: Long, to: Long, status: FlightStatus): List<FlightEntity>
 
 }

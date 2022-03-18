@@ -1,6 +1,7 @@
 package com.naltynbekkz.oneaviation.user
 
 import com.naltynbekkz.oneaviation.auth.RegistrationRequest
+import com.naltynbekkz.oneaviation.plane.Plane
 import com.naltynbekkz.oneaviation.util.HashUtils
 import com.naltynbekkz.oneaviation.util.SessionManager
 import com.naltynbekkz.oneaviation.util.entity.Role
@@ -54,6 +55,24 @@ class UserController(
             hashedPassword = hashUtils.hash(request.password.toCharArray())
         )
         return repository.save(userEntity).toUser()
+    }
+
+    @PutMapping("/admins/{id}")
+    fun putAdmin(
+        @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @PathVariable id: Long,
+        @RequestBody request: RegistrationRequest,
+        response: HttpServletResponse,
+    ): User {
+        val oldUser = repository.findById(id).get()
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
+
+        oldUser.username = request.username
+        oldUser.firstName = request.firstName
+        oldUser.lastName = request.lastName
+        oldUser.hashedPassword = hashUtils.hash(request.password.toCharArray())
+
+        return repository.save(oldUser).toUser()
     }
 
 }

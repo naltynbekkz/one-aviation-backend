@@ -23,7 +23,7 @@ class FlightEntity(
     @Embedded
     val arrival: Location? = null,
 
-    val status: FlightStatus? = null,
+    var status: FlightStatus? = null,
 ) {
-    fun toFlight() = Flight(id!!, plane!!.toPlane(), timestamp!!, departure!!, arrival!!, status!!)
+    fun toFlight(passengerCount: Int = 0) = Flight(id!!, plane!!.toPlane(), timestamp!!, departure!!, arrival!!, status!!, passengerCount)
 }
