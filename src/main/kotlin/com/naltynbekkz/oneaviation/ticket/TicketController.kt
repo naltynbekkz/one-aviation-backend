@@ -2,6 +2,7 @@ package com.naltynbekkz.oneaviation.ticket
 
 import com.naltynbekkz.oneaviation.util.SessionManager
 import com.naltynbekkz.oneaviation.util.entity.Page
+import com.naltynbekkz.oneaviation.util.entity.Role
 import com.naltynbekkz.oneaviation.util.pageParams
 import com.naltynbekkz.oneaviation.util.toPage
 import org.springframework.http.HttpStatus
@@ -32,17 +33,27 @@ class TicketController(
             }
     }
 
+    @PutMapping("/{id}")
+    fun uncancelTicket(
+        @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @PathVariable id: Int,
+        response: HttpServletResponse,
+    ) {
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER, Role.ADMIN, Role.GOD))
+        val entity = repository.findById(id).get()
+        entity.timestamp.undelete()
+        repository.save(entity)
+        response.status = 204
+    }
+
     @DeleteMapping("/{id}")
     fun cancelTicket(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ) {
-        val token = sessionManager.getToken(tokenId, response)
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER, Role.ADMIN, Role.GOD))
         val entity = repository.findById(id).get()
-        if (token.user!!.id != entity.passenger!!.user!!.id) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Ticket isn't yours to delete")
-        }
         entity.timestamp.delete()
         repository.save(entity)
         response.status = 204

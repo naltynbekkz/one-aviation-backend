@@ -30,7 +30,7 @@ class UserController(
     @GetMapping("/admins/{id}")
     fun getFlight(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ): User {
         sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
@@ -60,7 +60,7 @@ class UserController(
     @PutMapping("/admins/{id}")
     fun putAdmin(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         @RequestBody request: RegistrationRequest,
         response: HttpServletResponse,
     ): User {

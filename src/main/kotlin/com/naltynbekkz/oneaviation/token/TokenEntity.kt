@@ -10,7 +10,7 @@ import javax.persistence.*
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 class TokenEntity constructor(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Int? = null,
 
     @Column(unique = true, nullable = false)
     var uuid: String? = null,

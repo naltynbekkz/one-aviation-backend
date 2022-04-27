@@ -8,7 +8,7 @@ import javax.persistence.*
 @Table(name = "passengers")
 class PassengerEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Int? = null,
 
     var firstName: String? = null,
     var lastName: String? = null,

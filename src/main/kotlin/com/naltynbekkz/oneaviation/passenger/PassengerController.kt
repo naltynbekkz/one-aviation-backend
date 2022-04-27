@@ -41,20 +41,17 @@ class PassengerController(
         @RequestParam(value = "page", required = false) page: Int?,
         @RequestParam(value = "size", required = false) size: Int?,
         response: HttpServletResponse,
-    ): Page<Passenger> {
+    ): List<Passenger> {
 
         val token = sessionManager.getToken(tokenId, response)
 
-        return passengerRepository.getNotDeleted(token.user!!.id, pageParams(page, size))
-            .toPage {
-                it.toPassenger()
-            }
+        return passengerRepository.getNotDeleted(token.user!!.id).map { it.toPassenger() }
     }
 
     @DeleteMapping("/{id}")
     fun deletePassenger(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ) {
         val token = sessionManager.getToken(tokenId, response)

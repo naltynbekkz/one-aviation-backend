@@ -42,7 +42,7 @@ class PlaneController(
     @GetMapping("/{id}")
     fun getPlane(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ): Plane {
         sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
@@ -52,7 +52,7 @@ class PlaneController(
     @PutMapping("/{id}")
     fun putPlane(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         @RequestBody request: CreatePlaneRequest,
         response: HttpServletResponse,
     ): Plane {
@@ -72,7 +72,7 @@ class PlaneController(
     @DeleteMapping("/{id}")
     fun deletePlane(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ) {
         val plane = planeRepository.findById(id).get()

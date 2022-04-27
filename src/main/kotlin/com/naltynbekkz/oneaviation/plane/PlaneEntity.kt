@@ -9,10 +9,10 @@ import kotlin.random.Random
 @Table(name = "planes")
 class PlaneEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Int? = null,
 
     var name: String? = null,
-    var mileage: Long? = null,
+    var mileage: Int? = null,
     var capacity: Int? = null,
     var price: Float? = null, // price per kilometer per person in euros,
 
@@ -21,5 +21,5 @@ class PlaneEntity(
     @Embedded
     var timestamp: Timestamp = Timestamp(),
 ) {
-    fun toPlane() = Plane(id ?: Random.nextLong(0, 100000), name!!, mileage!!, capacity!!, price!!, timestamp)
+    fun toPlane() = Plane(id ?: Random.nextInt(0, 100000), name!!, mileage!!, capacity!!, price!!, timestamp)
 }

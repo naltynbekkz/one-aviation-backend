@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PlaneRepository : JpaRepository<PlaneEntity, Long> {
+interface PlaneRepository : JpaRepository<PlaneEntity, Int> {
     @Query(
         value = "select * from planes where timestamp_deleted is null",
         nativeQuery = true

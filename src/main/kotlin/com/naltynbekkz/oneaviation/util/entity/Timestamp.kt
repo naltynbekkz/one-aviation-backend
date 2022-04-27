@@ -15,4 +15,8 @@ data class Timestamp(
     fun delete() {
         deleted = System.currentTimeMillis()
     }
+
+    fun undelete() {
+        deleted = null
+    }
 }

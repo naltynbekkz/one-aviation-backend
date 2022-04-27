@@ -1,4 +1,4 @@
-package com.naltynbekkz.oneaviation.home
+package com.naltynbekkz.oneaviation.flight
 
 import com.naltynbekkz.oneaviation.util.entity.Info
 import com.naltynbekkz.oneaviation.util.entity.Location

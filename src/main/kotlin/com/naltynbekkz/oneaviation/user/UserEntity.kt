@@ -8,7 +8,7 @@ import javax.persistence.*
 @Table(name = "users")
 class UserEntity constructor(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Int? = null,
 
     @Column(unique = true)
     var username: String? = null,

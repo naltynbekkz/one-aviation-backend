@@ -61,7 +61,7 @@ class PilotController(
     @DeleteMapping("/{id}")
     fun deletePilot(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ) {
         val pilot = pilotRepository.findById(id).get()

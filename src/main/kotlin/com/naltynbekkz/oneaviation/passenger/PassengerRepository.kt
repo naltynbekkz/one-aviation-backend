@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PassengerRepository : JpaRepository<PassengerEntity, Long> {
+interface PassengerRepository : JpaRepository<PassengerEntity, Int> {
 
     @Query(
         value = "select * from passengers where timestamp_deleted is null and user_id = :userId",
         nativeQuery = true
     )
-    fun getNotDeleted(userId: Long?, pageable: Pageable): Page<PassengerEntity>
+    fun getNotDeleted(userId: Int?): List<PassengerEntity>
 }

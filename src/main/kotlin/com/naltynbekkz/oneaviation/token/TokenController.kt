@@ -32,7 +32,7 @@ class TokenController(
     @DeleteMapping("/{id}")
     fun deleteToken(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ) {
         val tokenEntity: TokenEntity = sessionManager.getToken(tokenId, response)

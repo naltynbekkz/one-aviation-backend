@@ -6,7 +6,7 @@ import com.naltynbekkz.oneaviation.user.User
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
 
 data class Ticket(
-    val id: Long,
+    val id: Int,
     val flight: Flight,
     val passenger: Passenger,
     val user: User,

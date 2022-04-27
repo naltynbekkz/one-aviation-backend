@@ -1,6 +1,7 @@
 package com.naltynbekkz.oneaviation.ticket
 
 import com.naltynbekkz.oneaviation.flight.FlightEntity
+import com.naltynbekkz.oneaviation.flight.FlightStatus
 import com.naltynbekkz.oneaviation.passenger.PassengerEntity
 import com.naltynbekkz.oneaviation.util.entity.Timestamp
 import javax.persistence.*
@@ -9,7 +10,7 @@ import javax.persistence.*
 @Table(name = "tickets")
 class TicketEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Int? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     val flight: FlightEntity? = null,

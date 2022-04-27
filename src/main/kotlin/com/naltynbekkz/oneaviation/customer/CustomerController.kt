@@ -48,7 +48,7 @@ class CustomerController(
     @DeleteMapping("/{id}")
     fun deletePassenger(
         @RequestHeader(value = "Authorization", required = false) tokenId: String?,
-        @PathVariable id: Long,
+        @PathVariable id: Int,
         response: HttpServletResponse,
     ) {
         sessionManager.getToken(tokenId, response, listOf(Role.MANAGER))
