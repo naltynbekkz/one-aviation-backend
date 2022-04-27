@@ -15,7 +15,7 @@ class FlightEntity(
     val id: Int? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    val plane: PlaneEntity? = null,
+    var plane: PlaneEntity? = null,
     @Embedded
     val timestamp: Timestamp? = null,
 

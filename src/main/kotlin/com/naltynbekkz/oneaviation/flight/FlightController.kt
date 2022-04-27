@@ -1,6 +1,7 @@
 package com.naltynbekkz.oneaviation.flight
 
 import com.naltynbekkz.oneaviation.passenger.PassengerRepository
+import com.naltynbekkz.oneaviation.plane.Plane
 import com.naltynbekkz.oneaviation.plane.PlaneRepository
 import com.naltynbekkz.oneaviation.ticket.TicketEntity
 import com.naltynbekkz.oneaviation.ticket.TicketRepository
@@ -72,6 +73,19 @@ class FlightController(
         if (request.flightStatus == FlightStatus.CANCELLED) {
             // TODO: send notifications
         }
+        return flightRepository.save(flight).toFlight()
+    }
+
+    @PutMapping("/change-plane/{id}")
+    fun updateFlight(
+        @RequestHeader(value = "Authorization", required = false) tokenId: String?,
+        @PathVariable id: Int,
+        @RequestBody request: Plane,
+        response: HttpServletResponse,
+    ): Flight {
+        sessionManager.getToken(tokenId, response, listOf(Role.MANAGER, Role.ADMIN))
+        val flight = flightRepository.findById(id).get()
+        flight.plane = planeRepository.findById(request.id).get()
         return flightRepository.save(flight).toFlight()
     }
 
